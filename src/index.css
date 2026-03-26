@@ -1,0 +1,199 @@
+:root {
+  --bg-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --accent-pink: #ff4081;
+  --accent-blue: #3498db;
+  --line-color: #eeeeee;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --sidebar-width: 280px;
+}
+
+[data-theme='dark'] {
+  --bg-color: #0d1117;
+  --card-bg: #161b22;
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --accent-pink: #ff4081;
+  --accent-blue: #58a6ff;
+  --line-color: #30363d;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Sidebar: Transform to Slide-Drawer on Mobile */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--card-bg);
+  border-right: 1px solid var(--line-color);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 1.5rem;
+  z-index: 10000;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* AGGRESSIVE MOBILE OVERRIDE */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 25px 0 80px rgba(0, 0, 0, 0.4);
+    width: 300px;
+    z-index: 999999; /* Higher than everything */
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-view {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-top: 6rem !important;
+  }
+
+  .nav-item {
+    font-size: 1.2rem;
+    padding: 1.2rem;
+    border-radius: 18px;
+  }
+}
+
+/* DESKTOP RESTORE */
+@media (min-width: 1025px) {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
+  .main-view {
+    margin-left: var(--sidebar-width) !important;
+    width: calc(100% - var(--sidebar-width)) !important;
+    padding-top: 2rem;
+  }
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+.content-wrapper {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* Common Cards & Inputs */
+.memo-card {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 40px var(--shadow-color);
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s;
+  border: 1px solid var(--line-color);
+}
+
+.memo-card:active {
+  transform: scale(0.98);
+}
+
+.glass-input {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid var(--line-color);
+  background: var(--bg-color);
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.glass-input:focus {
+  border-color: var(--accent-pink);
+}
+
+/* Grid Layout */
+.memo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .memo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Practice UI Scaling */
+.practice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding-bottom: 5rem;
+}
+
+/* Smartphone & Tablet Optimization */
+@media (max-width: 900px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+  
+  .main-view {
+    padding: 1.5rem 1rem;
+    padding-top: 7rem;
+  }
+
+  h1 {
+    font-size: 2.5rem !important;
+  }
+
+  .memo-card {
+    padding: 1.5rem !important;
+  }
+
+  #master-hamburger {
+    top: 1.5rem !important;
+    right: 1.5rem !important;
+    padding: 12px !important;
+  }
+
+  #master-hamburger svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Landscape mode for tablets/phones */
+@media (max-height: 500px) and (orientation: landscape) {
+  .practice-container {
+    padding-top: 2rem;
+  }
+  
+  .memo-card {
+    padding: 1rem !important;
+  }
+}
