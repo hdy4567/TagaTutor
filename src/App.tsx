@@ -1,12 +1,13 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, List, Languages, Sun, Moon, Search, Pin, Trash2, 
+import {
+  Plus, List, Languages, Sun, Moon, Search, Pin, Trash2,
   ChevronLeft, Award, Menu, X, Zap
 } from 'lucide-react';
 import * as wanakana from 'wanakana';
 import { useStore, segmentJapaneseWords } from './store';
 import { customWrapKanji } from './customKanji';
+import NewsInput from './link/NewsInput';
 
 // [CLEAN CORE] Minimal Mapping
 const kanaToKorean = (text: string) => {
@@ -14,31 +15,14 @@ const kanaToKorean = (text: string) => {
     'あ': '아', 'い': '이', 'う': '우', 'え': '에', 'お': '오',
     'か': '카', 'き': '키', 'く': '쿠', 'け': '케', 'こ': '코',
     'さ': '사', 'し': '시', 'す': '스', 'せ': '세', 'そ': '소',
-    'た': '타', 'ち': '치', 'つ': '쯔', 'て': '테', 'と': '토'
+    'た': '타', 'ち': '치', 'つ': '쯔', 'て': '테', '토': '토'
   };
   return text.split('').map(c => map[c] || c).join('');
 };
 
-const InputTab = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const { addMemo, setTab } = useStore();
-  const handleAdd = () => {
-    if (!title || !content) return;
-    addMemo({ title, content, tag: 'General', color: '#fff' });
-    setTab('list');
-  };
-  return (
-    <div className="content-wrapper">
-      <h1 style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '3rem' }}>New Sessions</h1>
-      <div className="memo-card" style={{ padding: '2.5rem' }}>
-        <input placeholder="Session Title" className="glass-input" value={title} onChange={e => setTitle(e.target.value)} style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }} />
-        <textarea placeholder="Paste Japanese text..." className="glass-input" value={content} onChange={e => setContent(e.target.value)} style={{ marginBottom: '1.5rem', minHeight: '15rem', fontSize: '1.1rem', resize: 'none' }} />
-        <button onClick={handleAdd} style={{ width: '100%', padding: '1.4rem', backgroundColor: 'var(--accent-pink)', color: 'white', border: 'none', borderRadius: '20px', fontWeight: '900', fontSize: '1.2rem', cursor: 'pointer', transition: 'transform 0.2s' }} onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'} onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}>Create Session</button>
-      </div>
-    </div>
-  );
-};
+
+
+
 
 const PracticeTab = () => {
   const { memos, selectedMemoId, currentSentenceIndex, userInput, setUserInput, setSentenceIndex, setTab, guideMode } = useStore();
@@ -152,22 +136,22 @@ const App = () => {
   return (
     <div className="app-container">
       {/* 1. PREMIUM FLOATING MASTER BUTTON */}
-      <button 
+      <button
         id="master-hamburger"
         className="mobile-only"
         onClick={() => setNavVisible(!isNavVisible)}
-        style={{ 
-          position: 'fixed', 
-          top: '1.5rem', 
-          right: '1.5rem', 
-          zIndex: 1000000, 
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          right: '1.5rem',
+          zIndex: 1000000,
           background: 'rgba(255, 64, 129, 0.95)',
           backdropFilter: 'blur(10px)',
-          color: 'white', 
-          border: '1px solid rgba(255,255,255,0.3)', 
-          padding: '14px', 
-          borderRadius: '20px', 
-          boxShadow: '0 10px 40px rgba(255, 64, 129, 0.4)', 
+          color: 'white',
+          border: '1px solid rgba(255,255,255,0.3)',
+          padding: '14px',
+          borderRadius: '20px',
+          boxShadow: '0 10px 40px rgba(255, 64, 129, 0.4)',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
@@ -191,18 +175,18 @@ const App = () => {
         </nav>
 
         <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', borderTop: '1px solid var(--line-color)', paddingTop: '2rem' }}>
-          <div 
-            onClick={cycleGuideMode} 
-            className="nav-item" 
-            style={{ 
-              fontSize: '1rem', 
+          <div
+            onClick={cycleGuideMode}
+            className="nav-item"
+            style={{
+              fontSize: '1rem',
               background: guideMode === 'romaji' ? 'rgba(52,152,219,0.15)' : 'transparent',
               color: guideMode === 'romaji' ? '#3498db' : 'inherit',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               boxShadow: guideMode === 'romaji' ? '0 0 15px rgba(52,152,219,0.2)' : 'none'
             }}
           >
-            <Languages size={20} color={guideMode === 'romaji' ? '#3498db' : 'currentColor'} /> 
+            <Languages size={20} color={guideMode === 'romaji' ? '#3498db' : 'currentColor'} />
             Guide: <span style={{ fontWeight: '900', marginLeft: '5px' }}>{guideMode.toUpperCase()}</span>
           </div>
           <div onClick={toggleTheme} className="nav-item" style={{ fontSize: '1rem' }}>{isDarkMode ? <Sun size={20} color="#ffeb3b" /> : <Moon size={20} />} {isDarkMode ? 'Light Mode' : 'Night Mode'}</div>
@@ -212,13 +196,13 @@ const App = () => {
       {/* 3. MOBILE BACKDROP */}
       <AnimatePresence>
         {isNavVisible && (
-          <motion.div 
+          <motion.div
             className="mobile-only"
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={() => setNavVisible(false)}
-            style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)', zIndex: 99999 }} 
+            style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)', zIndex: 99999 }}
           />
         )}
       </AnimatePresence>
@@ -226,7 +210,7 @@ const App = () => {
       <main className="main-view">
         <AnimatePresence mode="wait">
           {currentTab === 'list' && <motion.div key="list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><ListTab /></motion.div>}
-          {currentTab === 'input' && <motion.div key="input" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><InputTab /></motion.div>}
+          {currentTab === 'input' && <motion.div key="input" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><NewsInput /></motion.div>}
           {currentTab === 'practice' && <motion.div key="practice" initial={{ opacity: 0 }} animate={{ opacity: 1 }}><PracticeTab /></motion.div>}
           {currentTab === 'stats' && <motion.div key="stats" initial={{ opacity: 0 }} animate={{ opacity: 1 }}><StatsTab /></motion.div>}
         </AnimatePresence>
