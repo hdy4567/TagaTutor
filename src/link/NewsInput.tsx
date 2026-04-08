@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useStore } from '../store';
 import { useNewsFetch } from './useNewsFetch';
+import { formatTitle, formatContent } from './textFormatter';
 
 /**
  * [CLEAN CORE] NewsInput Component
@@ -18,6 +19,11 @@ const NewsInput = () => {
       setTitle(news.title);
       setContent(news.content);
     }
+  };
+
+  const handleManualFormat = () => {
+    setTitle(formatTitle(title));
+    setContent(formatContent(content));
   };
 
   const handleAdd = async () => {
@@ -79,6 +85,14 @@ const NewsInput = () => {
             <div style={fetchingIndicatorStyle}>
               FETCHING...
             </div>
+          )}
+          {content.length > 0 && !isFetching && (
+            <button
+              onClick={handleManualFormat}
+              style={{ ...btnStyle, top: 'auto', bottom: '10px', fontSize: '0.8rem', opacity: 0.8 }}
+            >
+              CLEAN UP
+            </button>
           )}
         </div>
         <button

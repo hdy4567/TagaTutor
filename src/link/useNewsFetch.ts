@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { fetchNews, isUrl } from './newsFetcher';
+import { fetchNews } from './newsFetcher';
+import { isUrl } from './textFormatter';
 import type { NewsContent } from './newsFetcher';
 
 /**
